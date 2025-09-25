@@ -8,6 +8,7 @@ import {
   IconNewSection,
   IconTerminal2,
 } from "@tabler/icons-react";
+import { ThemeTogglePopover } from "../theme/themeToggle";
 
 export function Dock() {
   const links = [
@@ -67,13 +68,15 @@ export function Dock() {
       ),
       href: "#",
     },
+    {
+      title: "Theme",
+      icon: <ThemeTogglePopover side="top" align="center" />, 
+      href: "#",
+    },
   ];
   return (
     <div className="flex items-center justify-center w-full">
-      <FloatingDock
-        mobileClassName="translate-y-20"
-        items={links}
-      />
+      <FloatingDock mobileClassName="translate-y-20" items={links} />
     </div>
   );
 }
