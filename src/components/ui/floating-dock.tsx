@@ -1,4 +1,7 @@
+"use client";
+
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 import { IconLayoutNavbarCollapse } from "@tabler/icons-react";
 import {
   AnimatePresence,
@@ -10,12 +13,14 @@ import {
 } from "motion/react";
 import { useRef, useState } from "react";
 
+type DockItem = { title: string; icon: React.ReactNode; href: string };
+
 export const FloatingDock = ({
   items,
   desktopClassName,
   mobileClassName,
 }: {
-  items: { title: string; icon: React.ReactNode; href: string }[];
+  items: DockItem[];
   desktopClassName?: string;
   mobileClassName?: string;
 }) => {
@@ -31,7 +36,7 @@ const FloatingDockMobile = ({
   items,
   className,
 }: {
-  items: { title: string; icon: React.ReactNode; href: string }[];
+  items: DockItem[];
   className?: string;
 }) => {
   const [open, setOpen] = useState(false);
@@ -55,13 +60,13 @@ const FloatingDockMobile = ({
                 }}
                 transition={{ delay: (items.length - 1 - idx) * 0.05 }}
               >
-                <a
+                <NavItemLink
                   href={item.href}
+                  ariaLabel={item.title}
                   className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-foreground/5 hover:bg-foreground/10 transition"
-                  aria-label={item.title}
                 >
                   <div className="h-4 w-4 text-foreground">{item.icon}</div>
-                </a>
+                </NavItemLink>
               </motion.div>
             ))}
           </motion.div>
@@ -83,7 +88,7 @@ const FloatingDockDesktop = ({
   items,
   className,
 }: {
-  items: { title: string; icon: React.ReactNode; href: string }[];
+  items: DockItem[];
   className?: string;
 }) => {
   const mouseX = useMotionValue(Infinity);
@@ -124,43 +129,19 @@ function IconContainer({
   const widthTransform = useTransform(distance, [-150, 0, 150], [40, 80, 40]);
   const heightTransform = useTransform(distance, [-150, 0, 150], [40, 80, 40]);
 
-  const widthTransformIcon = useTransform(
-    distance,
-    [-150, 0, 150],
-    [20, 40, 20]
-  );
-  const heightTransformIcon = useTransform(
-    distance,
-    [-150, 0, 150],
-    [20, 40, 20]
-  );
+  const widthTransformIcon = useTransform(distance, [-150, 0, 150], [20, 40, 20]);
+  const heightTransformIcon = useTransform(distance, [-150, 0, 150], [20, 40, 20]);
 
-  const width = useSpring(widthTransform, {
-    mass: 0.1,
-    stiffness: 150,
-    damping: 12,
-  });
-  const height = useSpring(heightTransform, {
-    mass: 0.1,
-    stiffness: 150,
-    damping: 12,
-  });
+  const width = useSpring(widthTransform, { mass: 0.1, stiffness: 150, damping: 12 });
+  const height = useSpring(heightTransform, { mass: 0.1, stiffness: 150, damping: 12 });
 
-  const widthIcon = useSpring(widthTransformIcon, {
-    mass: 0.1,
-    stiffness: 150,
-    damping: 12,
-  });
-  const heightIcon = useSpring(heightTransformIcon, {
-    mass: 0.1,
-    stiffness: 150,
-    damping: 12,
-  });
+  const widthIcon = useSpring(widthTransformIcon, { mass: 0.1, stiffness: 150, damping: 12 });
+  const heightIcon = useSpring(heightTransformIcon, { mass: 0.1, stiffness: 150, damping: 12 });
 
   const [hovered, setHovered] = useState(false);
 
   return (
-    <a href={href} aria-label={title}>
+    <NavItemLink href={href} ariaLabel={title}>
       <motion.div
         ref={ref}
         style={{ width, height }}
@@ -188,9 +169,41 @@ function IconContainer({
           {icon}
         </motion.div>
       </motion.div>
+      {/* Optional active dot:
+      <div className="mt-1 h-1.5 w-1.5 mx-auto rounded-full bg-primary" /> */}
+    </NavItemLink>
+  );
+}
 
-      {/* Optional “active” dot under the icon (use route match to toggle) */}
-      {/* <div className="mt-1 h-1.5 w-1.5 mx-auto rounded-full bg-primary" /> */}
-    </a>
+/** Utility: use Next <Link> for internal routes; <a target=_blank> for externals */
+function NavItemLink({
+  href,
+  ariaLabel,
+  className,
+  children,
+}: {
+  href: string;
+  ariaLabel: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  const isExternal = /^https?:\/\//i.test(href);
+  if (isExternal) {
+    return (
+      <a
+        href={href}
+        aria-label={ariaLabel}
+        className={className}
+        target="_blank"
+        rel="noreferrer"
+      >
+        {children}
+      </a>
+    );
+  }
+  return (
+    <Link href={href} aria-label={ariaLabel} className={className}>
+      {children}
+    </Link>
   );
 }

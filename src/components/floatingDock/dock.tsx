@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { FloatingDock } from "@/components/ui/floating-dock";
 import {
@@ -14,24 +16,17 @@ export function Dock() {
   const links = [
     {
       title: "Home",
-      icon: (
-        <IconHome className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-      ),
-      href: "#",
+      icon: <IconHome className="h-full w-full text-foreground/80" />,
+      href: "/",
     },
-
     {
-      title: "Products",
-      icon: (
-        <IconTerminal2 className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-      ),
-      href: "#",
+      title: "Skills",
+      icon: <IconTerminal2 className="h-full w-full text-foreground/80" />,
+      href: "/skills",
     },
     {
       title: "Components",
-      icon: (
-        <IconNewSection className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-      ),
+      icon: <IconNewSection className="h-full w-full text-foreground/80" />,
       href: "#",
     },
     {
@@ -42,41 +37,39 @@ export function Dock() {
           width={20}
           height={20}
           alt="Aceternity Logo"
+          className="opacity-90"
         />
       ),
       href: "#",
     },
     {
       title: "Changelog",
-      icon: (
-        <IconExchange className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-      ),
+      icon: <IconExchange className="h-full w-full text-foreground/80" />,
       href: "#",
     },
-
+    // External links: if your FloatingDock uses Next <Link>, keep these as '#'
+    // or update FloatingDock to detect absolute URLs and render <a target="_blank">.
     {
       title: "Twitter",
-      icon: (
-        <IconBrandX className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-      ),
+      icon: <IconBrandX className="h-full w-full text-foreground/80" />,
       href: "#",
     },
     {
       title: "GitHub",
-      icon: (
-        <IconBrandGithub className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-      ),
+      icon: <IconBrandGithub className="h-full w-full text-foreground/80" />,
       href: "#",
     },
+    // Theme popover in a dock icon
     {
       title: "Theme",
-      icon: <ThemeTogglePopover side="top" align="center" />, 
+      icon: <ThemeTogglePopover side="top" align="center" />,
       href: "#",
     },
   ];
+
   return (
-    <div className="flex items-center justify-center w-full">
-      <FloatingDock mobileClassName="translate-y-20" items={links} />
+    <div className="w-full flex items-center justify-center">
+      <FloatingDock  items={links} mobileClassName="" />
     </div>
   );
 }

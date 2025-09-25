@@ -64,56 +64,68 @@ export function ThemeTogglePopover({
         </button>
       </PopoverTrigger>
 
+      {/* Mac window look */}
       <PopoverContent
         side={side}
         align={align}
-        className="w-64 p-3 border border-border bg-popover text-popover-foreground"
+        // zero padding; we'll build our own chrome inside
+        className="w-72 p-0 rounded-xl overflow-hidden border border-border bg-popover text-popover-foreground shadow-2xl"
       >
-        {/* Header */}
-        <div className="mb-2 text-sm font-medium">Appearance</div>
+        {/* Title bar */}
+        <div className="relative h-8 flex items-center justify-center border-b border-border bg-muted/70 backdrop-blur-sm">
+          <div className="absolute left-2 flex items-center gap-2">
+            <span className="h-3 w-3 rounded-full bg-[#ff605c]" aria-hidden />
+            <span className="h-3 w-3 rounded-full bg-[#ffbd44]" aria-hidden />
+            <span className="h-3 w-3 rounded-full bg-[#00ca4e]" aria-hidden />
+          </div>
+          <div className="text-xs font-medium tracking-wide select-none">
+            Appearance
+          </div>
+        </div>
 
-        {/* Theme Select (SSR-safe: render a neutral shell until mounted) */}
-        {!mounted ? (
-          <div className="w-full h-9 rounded-md border border-border/60 bg-background/60 mb-3" />
-        ) : (
-          <Select value={mode} onValueChange={(v) => setMode(v as Mode)}>
-            <SelectTrigger className="w-full mb-3">
-              <SelectValue placeholder="Theme" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
-            </SelectContent>
-          </Select>
-        )}
-
-        {/* Accent grid */}
-        <div className="grid grid-cols-5 gap-2">
-          {ACCENTS.map((a) =>
-            !mounted ? (
-              <div
-                key={a}
-                className="h-8 w-8 rounded-full border border-border/60"
-                style={{ background: ACCENT_SWATCH[a] }}
-                aria-hidden
-              />
-            ) : (
-              <Button
-                key={a}
-                type="button"
-                variant={a === accent ? "default" : "outline"}
-                className="h-8 w-8 p-0 rounded-full border border-border"
-                aria-label={`Set accent ${a}`}
-                onClick={() => {
-                  setAccent(a as Accent);
-                  // keep popover open so user can try multiple quickly
-                }}
-                style={{ background: ACCENT_SWATCH[a] }}
-                data-preview-accent={a}
-              />
-            )
+        {/* Body */}
+        <div className="p-3 space-y-3 bg-card">
+          {/* Theme Select (SSR-safe shell until mounted) */}
+          {!mounted ? (
+            <div className="w-full h-9 rounded-md border border-border/60 bg-background/60" />
+          ) : (
+            <Select value={mode} onValueChange={(v) => setMode(v as Mode)}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Theme" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="light">Light</SelectItem>
+                <SelectItem value="dark">Dark</SelectItem>
+                <SelectItem value="system">System</SelectItem>
+              </SelectContent>
+            </Select>
           )}
+
+          {/* Accent grid */}
+          <div className="grid grid-cols-5 gap-2">
+            {ACCENTS.map((a) =>
+              !mounted ? (
+                <div
+                  key={a}
+                  className="h-8 w-8 rounded-full border border-border/60"
+                  style={{ background: ACCENT_SWATCH[a] }}
+                  aria-hidden
+                />
+              ) : (
+                <Button
+                  key={a}
+                  type="button"
+                  variant={a === accent ? "default" : "outline"}
+                  className="h-8 w-8 p-0 rounded-full border border-border data-[state=on]:ring-2 data-[state=on]:ring-primary/50"
+                  aria-label={`Set accent ${a}`}
+                  onClick={() => setAccent(a as Accent)}
+                  style={{ background: ACCENT_SWATCH[a] }}
+                  data-preview-accent={a}
+                  data-state={a === accent ? "on" : "off"}
+                />
+              )
+            )}
+          </div>
         </div>
       </PopoverContent>
     </Popover>

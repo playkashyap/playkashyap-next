@@ -2,12 +2,11 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme/themeProvider";
+import { SplashGate } from "@/components/shell/SplashGate";
+import { DockPortal } from "@/components/shell/DockPortal";
+import { Loader } from "@/components/Loader/loader";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
+const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
@@ -28,9 +27,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {/* ThemeProvider should control <html> */}
         <ThemeProvider defaultMode="system" defaultAccent="violet">
-          {children}
+          <SplashGate durationMs={4500} Loader={Loader}>
+            {children}
+            <DockPortal />
+          </SplashGate>
         </ThemeProvider>
       </body>
     </html>
