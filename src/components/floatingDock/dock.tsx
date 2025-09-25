@@ -33,12 +33,12 @@ export function Dock() {
     {
       title: "Aceternity UI",
       icon: (
-        <img
-          src="https://assets.aceternity.com/logo-dark.png"
-          width={20}
-          height={20}
-          alt="Aceternity Logo"
-          className="opacity-90"
+        <Image
+          src="/profile.jpg"
+          alt="profile"
+          className="h-full w-full rounded-md object-cover"
+          width={24}
+          height={24}
         />
       ),
       href: "#",
@@ -70,7 +70,7 @@ export function Dock() {
 
   return (
     <div className="w-full flex items-center justify-center">
-      <FloatingDock  items={links} mobileClassName="" />
+      <FloatingDock items={links} mobileClassName="" />
     </div>
   );
 }

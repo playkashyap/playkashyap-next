@@ -14,6 +14,14 @@ const ACCENT_SWATCH: Record<Accent, string> = {
   rose: "oklch(0.65 0.25 20)",
 };
 
+// Add this interface for type safety
+interface WindowState {
+  width: number;
+  height: number;
+  x?: number;
+  y?: number;
+}
+
 function pathToTitle(pathname: string): string {
   if (!pathname || pathname === "/") return "Home";
   const first = pathname
@@ -29,7 +37,7 @@ export default function MacWindow({
   children,
   storageKey,
   initial = { width: 1100, height: 700 },
-  margin = 12, // inner gap from stage edges
+  margin = 12,
 }: {
   children: React.ReactNode;
   storageKey?: string;
@@ -42,7 +50,7 @@ export default function MacWindow({
   const title = pathToTitle(pathname ?? "/");
   const key = storageKey ?? `macwin:${pathname}`;
 
-  const computeInitial = React.useCallback(() => {
+  const computeInitial = React.useCallback((): WindowState => {
     const rect = stageRef.current?.getBoundingClientRect();
     const vw = rect?.width ?? window.innerWidth;
     const vh = rect?.height ?? window.innerHeight;
@@ -53,19 +61,20 @@ export default function MacWindow({
     return { width: w, height: h, x, y };
   }, [initial.width, initial.height, margin]);
 
-  const [state, setState] = React.useState(() => {
+  const [state, setState] = React.useState<WindowState>(() => {
     if (typeof window === "undefined") return initial;
     const saved = window.localStorage.getItem(key);
     if (saved) {
       try {
-        return JSON.parse(saved);
+        return JSON.parse(saved) as WindowState;
       } catch {}
     }
     return computeInitial();
   });
 
+  // Fix: Replace 'any' with 'WindowState'
   const save = React.useCallback(
-    (next: any) => {
+    (next: WindowState) => {
       setState(next);
       if (typeof window !== "undefined") {
         window.localStorage.setItem(key, JSON.stringify(next));
@@ -137,7 +146,7 @@ export default function MacWindow({
             y: pos.y,
           })
         }
-        bounds="parent" // <-- stays inside the stage
+        bounds="parent"
         minWidth={520}
         minHeight={220}
         dragHandleClassName="macwin-drag"

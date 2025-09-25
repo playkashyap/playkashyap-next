@@ -42,6 +42,11 @@ function pathToTitle(pathname: string): string {
   return title;
 }
 
+// Define interface for CSS custom properties
+interface CSSPropertiesWithVars extends React.CSSProperties {
+  "--accent"?: string;
+}
+
 export default function MacTopBar() {
   const { accent } = useTheme();
   const pathname = usePathname();
@@ -81,8 +86,11 @@ export default function MacTopBar() {
         "flex items-center justify-between px-3",
         "text-sm text-foreground",
       ].join(" ")}
+      // Fix: Replace 'any' with proper typing for CSS custom properties
       style={
-        { ["--accent" as any]: `var(--accent, ${accentColor})` } as React.CSSProperties
+        {
+          "--accent": `var(--accent, ${accentColor})`
+        } as CSSPropertiesWithVars
       }
       role="menubar"
       aria-label="macOS-style menu bar"

@@ -61,7 +61,7 @@ export function ThemeTogglePopover({
     setWallpaper,
     solidColor, // NEW
     setSolidColor, // NEW
-  } = useTheme() as any;
+  } = useTheme();
 
   const [mounted, setMounted] = React.useState(false);
   const [open, setOpen] = React.useState(false);

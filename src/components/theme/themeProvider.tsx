@@ -3,11 +3,12 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 
 type Mode = "light" | "dark" | "system";
 type Accent = "violet" | "blue" | "green" | "amber" | "rose";
+type WallpaperId = "default" | "mountains" | "abstract" | "solid";
 
 // UPDATED: Wallpapers are now only built-ins (we're removing upload for now)
 type Wallpaper = {
   type: "builtin";
-  id: "default" | "mountains" | "abstract" | "solid";
+  id: WallpaperId;
 };
 
 type ThemeCtx = {
@@ -24,6 +25,19 @@ type ThemeCtx = {
 };
 
 const Ctx = createContext<ThemeCtx | null>(null);
+
+// Helper function to validate types at runtime
+function isValidMode(value: string): value is Mode {
+  return ["light", "dark", "system"].includes(value);
+}
+
+function isValidAccent(value: string): value is Accent {
+  return ["violet", "blue", "green", "amber", "rose"].includes(value);
+}
+
+function isValidWallpaperId(value: string): value is WallpaperId {
+  return ["default", "mountains", "abstract", "solid"].includes(value);
+}
 
 export function ThemeProvider({
   children,
@@ -48,19 +62,26 @@ export function ThemeProvider({
 
   // 2) On mount: load persisted values
   useEffect(() => {
-    const savedMode =
-      (localStorage.getItem("ui-theme-mode") as Mode) || defaultMode;
-    const savedAccent =
-      (localStorage.getItem("ui-theme-accent") as Accent) || defaultAccent;
-    const savedWallpaper =
-      (localStorage.getItem("ui-theme-wallpaper") as string) ||
-      (defaultWallpaper.type === "builtin" ? defaultWallpaper.id : "default");
-    const savedSolid =
-      localStorage.getItem("ui-theme-solid-color") || defaultSolidColor; // NEW
+    const savedModeString = localStorage.getItem("ui-theme-mode");
+    const savedMode = savedModeString && isValidMode(savedModeString) 
+      ? savedModeString 
+      : defaultMode;
+
+    const savedAccentString = localStorage.getItem("ui-theme-accent");
+    const savedAccent = savedAccentString && isValidAccent(savedAccentString)
+      ? savedAccentString
+      : defaultAccent;
+
+    const savedWallpaperString = localStorage.getItem("ui-theme-wallpaper");
+    const savedWallpaperId = savedWallpaperString && isValidWallpaperId(savedWallpaperString)
+      ? savedWallpaperString
+      : (defaultWallpaper.type === "builtin" ? defaultWallpaper.id : "default");
+
+    const savedSolid = localStorage.getItem("ui-theme-solid-color") || defaultSolidColor; // NEW
 
     setMode(savedMode);
     setAccent(savedAccent);
-    setWallpaper({ type: "builtin", id: savedWallpaper as any });
+    setWallpaper({ type: "builtin", id: savedWallpaperId });
     setSolidColor(savedSolid); // NEW
 
     // apply to <html>
@@ -73,7 +94,7 @@ export function ThemeProvider({
     const root = document.documentElement;
     root.classList.toggle("dark", isDark);
     root.setAttribute("data-accent", savedAccent);
-    root.setAttribute("data-wallpaper", savedWallpaper);
+    root.setAttribute("data-wallpaper", savedWallpaperId);
     // NEW: seed the CSS var so the solid rule can read it
     root.style.setProperty("--solid-bg", savedSolid);
 
@@ -91,7 +112,7 @@ export function ThemeProvider({
 
     setReady(true);
     return () => mql.removeEventListener("change", onChange);
-  }, []); // <-- only once
+  }, [defaultAccent, defaultMode, defaultSolidColor, defaultWallpaper.id, defaultWallpaper.type]); // Fixed: Added missing dependencies
 
   // 3) Watch mode
   useEffect(() => {
@@ -128,7 +149,7 @@ export function ThemeProvider({
     if (wallpaper.id === "solid") {
       root.style.setProperty("--solid-bg", solidColor);
     }
-  }, [wallpaper, ready]); // reads solidColor too, but separate effect below keeps it in sync
+  }, [wallpaper, ready, solidColor]); // Fixed: Added solidColor dependency
 
   // NEW 6) Watch solidColor
   useEffect(() => {
@@ -140,7 +161,7 @@ export function ThemeProvider({
     if (wallpaper.id === "solid") {
       // nothing else needed because CSS uses var(--solid-bg)
     }
-  }, [solidColor, wallpaper, ready]);
+  }, [solidColor, wallpaper.id, ready]); // Fixed: Changed wallpaper to wallpaper.id to be more specific
 
   return (
     <Ctx.Provider
