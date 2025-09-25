@@ -31,7 +31,7 @@ export function Dock() {
       href: "#",
     },
     {
-      title: "Aceternity UI",
+      title: "Profile",
       icon: (
         <Image
           src="/profile.jpg"
