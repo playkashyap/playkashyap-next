@@ -186,12 +186,38 @@
   background: oklch(0.65 0.25 20) !important;
 }
 
+
+
+
+html[data-wallpaper="default"] {
+  /* Light theme default wallpaper */
+  background: #e1ecff;
+}
+
+html.dark[data-wallpaper="default"] {
+  /* Dark theme default wallpaper */
+  background: #111111;
+}
+
+:root[data-wallpaper="mountains"] {
+  background: url("/wallpapers/mountains.jpg") center/cover no-repeat fixed;
+}
+
+:root[data-wallpaper="abstract"] {
+  background: url("/wallpapers/abstract.png") center/cover no-repeat fixed;
+}
+
+:root[data-wallpaper="solid"] {
+  background: #111;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    background-color: transparent;
   }
 }

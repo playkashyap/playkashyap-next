@@ -11,6 +11,7 @@ import {
   IconTerminal2,
 } from "@tabler/icons-react";
 import { ThemeTogglePopover } from "../theme/themeToggle";
+import Image from "next/image";
 
 export function Dock() {
   const links = [
