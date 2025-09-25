@@ -21,7 +21,6 @@ type Mode = "light" | "dark" | "system";
 type Accent = "violet" | "blue" | "green" | "amber" | "rose";
 type BuiltinWallpaperId = "default" | "mountains" | "abstract" | "solid";
 
-// Accent presets (SSR-safe)
 const ACCENTS = ["violet", "blue", "green", "amber", "rose"] as const;
 const ACCENT_SWATCH: Record<Accent, string> = {
   violet: "oklch(0.53 0.26 300)",
@@ -31,16 +30,10 @@ const ACCENT_SWATCH: Record<Accent, string> = {
   rose: "oklch(0.65 0.25 20)",
 };
 
-// Small, self-contained previews so it works even before you add global CSS
 const WALLPAPER_PREVIEW: Record<BuiltinWallpaperId, React.CSSProperties> = {
-  default: {
-    background: "#e1ecff",
-  },
-  solid: {
-    background: "var(--card, #111)",
-  },
+  default: { background: "#e1ecff" },
+  solid: { background: "var(--solid-bg, #111111)" }, // UPDATED: reflect chosen color
   mountains: {
-    // point to your /public/wallpapers/mountains.jpg (or leave as placeholder color)
     backgroundImage: "url(/wallpapers/mountains.jpg)",
     backgroundSize: "cover",
     backgroundPosition: "center",
@@ -62,16 +55,16 @@ export function ThemeTogglePopover({
   const {
     mode,
     accent,
-    wallpaper, // { type: 'builtin' | 'upload', ... }
+    wallpaper,
     setMode,
     setAccent,
     setWallpaper,
+    solidColor, // NEW
+    setSolidColor, // NEW
   } = useTheme() as any;
 
   const [mounted, setMounted] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-  const fileRef = React.useRef<HTMLInputElement | null>(null);
-
   React.useEffect(() => setMounted(true), []);
 
   const TriggerIcon = !mounted ? (
@@ -84,6 +77,18 @@ export function ThemeTogglePopover({
 
   const isActiveBuiltin = (id: BuiltinWallpaperId) =>
     wallpaper?.type === "builtin" && wallpaper.id === id;
+
+  // quick presets for solid
+  const SOLID_PRESETS = [
+    "#111111",
+    "#0ea5e9",
+    "#1f2937",
+    "#0f172a",
+    "#18181b",
+    "#020617",
+    "#e11d48",
+    "#22c55e",
+  ];
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -167,7 +172,7 @@ export function ThemeTogglePopover({
               Wallpaper
             </div>
 
-            {/* Built-ins */}
+            {/* Built-ins (no Upload now) */}
             <div className="grid grid-cols-4 gap-2">
               {(
                 [
@@ -202,52 +207,43 @@ export function ThemeTogglePopover({
                   </div>
                 </button>
               ))}
-
-              {/* Upload (session-only) */}
-              <label className="h-14 w-full rounded-md border flex items-center justify-center cursor-pointer text-xs text-muted-foreground hover:bg-accent/10">
-                Upload
-                <input
-                  ref={fileRef}
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      const url = URL.createObjectURL(file);
-                      setWallpaper({ type: "upload", url });
-                    }
-                  }}
-                />
-              </label>
             </div>
 
-            {/* If an upload is active, show a tiny preview + reset */}
-            {mounted && wallpaper?.type === "upload" && (
-              <div className="mt-2 flex items-center justify-between rounded-md border px-2 py-1">
-                <span className="text-xs opacity-70">Custom (session)</span>
-                <div className="flex items-center gap-2">
-                  <div
-                    className="h-6 w-10 rounded border"
-                    style={{
-                      backgroundImage: `url(${wallpaper.url})`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                    }}
-                  />
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="h-7 px-2 text-xs"
-                    onClick={() =>
-                      setWallpaper({ type: "builtin", id: "default" })
-                    }
-                  >
-                    Reset
-                  </Button>
+            {/* NEW: Solid color controls (only when solid selected) */}
+            {mounted &&
+              wallpaper?.type === "builtin" &&
+              wallpaper.id === "solid" && (
+                <div className="mt-3 space-y-2 rounded-md border p-2">
+                  <div className="text-xs opacity-70">Solid color</div>
+
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="color"
+                      value={solidColor}
+                      onChange={(e) => setSolidColor(e.target.value)}
+                      className="h-8 w-10 cursor-pointer rounded border bg-transparent p-0"
+                      aria-label="Pick solid background color"
+                    />
+                    <div className="flex items-center gap-2">
+                      {SOLID_PRESETS.map((hex) => (
+                        <button
+                          key={hex}
+                          type="button"
+                          onClick={() => setSolidColor(hex)}
+                          className="h-6 w-6 rounded border"
+                          style={{ background: hex }}
+                          aria-label={`Set ${hex}`}
+                          title={hex}
+                        />
+                      ))}
+                    </div>
+                    <div
+                      className="ml-auto h-6 w-10 rounded border"
+                      style={{ background: solidColor }}
+                    />
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
         </div>
       </PopoverContent>

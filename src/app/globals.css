@@ -208,7 +208,7 @@ html.dark[data-wallpaper="default"] {
 }
 
 :root[data-wallpaper="solid"] {
-  background: #111;
+  background: var(--solid-bg, #111111);
 }
 
 @layer base {

@@ -124,7 +124,7 @@ export default function MacTopBar() {
       {/* RIGHT cluster: status */}
       <div className="flex items-center gap-3">
         <IoIosWifi size={16} style={{ color: "var(--accent)" }} aria-label="Wi-Fi" />
-        <span className="text-xs tabular-nums opacity-90">70%</span>
+        <span className="text-xs tabular-nums opacity-90">100%</span>
         <IoIosBatteryFull
           size={16}
           className="opacity-80 dark:opacity-90"

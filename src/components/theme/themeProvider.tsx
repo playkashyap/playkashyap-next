@@ -4,10 +4,11 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 type Mode = "light" | "dark" | "system";
 type Accent = "violet" | "blue" | "green" | "amber" | "rose";
 
-// Wallpapers can be built-in (string id) or user-upload (session only)
-type Wallpaper =
-  | { type: "builtin"; id: "default" | "mountains" | "abstract" | "solid" }
-  | { type: "upload"; url: string };
+// UPDATED: Wallpapers are now only built-ins (we're removing upload for now)
+type Wallpaper = {
+  type: "builtin";
+  id: "default" | "mountains" | "abstract" | "solid";
+};
 
 type ThemeCtx = {
   mode: Mode;
@@ -16,6 +17,9 @@ type ThemeCtx = {
   setMode: (m: Mode) => void;
   setAccent: (a: Accent) => void;
   setWallpaper: (w: Wallpaper) => void;
+  // NEW: solid color
+  solidColor: string;
+  setSolidColor: (hex: string) => void;
   ready: boolean;
 };
 
@@ -26,16 +30,20 @@ export function ThemeProvider({
   defaultMode = "system",
   defaultAccent = "violet",
   defaultWallpaper = { type: "builtin", id: "default" } as Wallpaper,
+  // NEW: default for solid color
+  defaultSolidColor = "#111111",
 }: {
   children: React.ReactNode;
   defaultMode?: Mode;
   defaultAccent?: Accent;
   defaultWallpaper?: Wallpaper;
+  defaultSolidColor?: string;
 }) {
   // 1) SSR-safe defaults
   const [mode, setMode] = useState<Mode>(defaultMode);
   const [accent, setAccent] = useState<Accent>(defaultAccent);
   const [wallpaper, setWallpaper] = useState<Wallpaper>(defaultWallpaper);
+  const [solidColor, setSolidColor] = useState<string>(defaultSolidColor); // NEW
   const [ready, setReady] = useState(false);
 
   // 2) On mount: load persisted values
@@ -44,14 +52,16 @@ export function ThemeProvider({
       (localStorage.getItem("ui-theme-mode") as Mode) || defaultMode;
     const savedAccent =
       (localStorage.getItem("ui-theme-accent") as Accent) || defaultAccent;
-
     const savedWallpaper =
       (localStorage.getItem("ui-theme-wallpaper") as string) ||
       (defaultWallpaper.type === "builtin" ? defaultWallpaper.id : "default");
+    const savedSolid =
+      localStorage.getItem("ui-theme-solid-color") || defaultSolidColor; // NEW
 
     setMode(savedMode);
     setAccent(savedAccent);
     setWallpaper({ type: "builtin", id: savedWallpaper as any });
+    setSolidColor(savedSolid); // NEW
 
     // apply to <html>
     const prefersDark = window.matchMedia(
@@ -64,6 +74,8 @@ export function ThemeProvider({
     root.classList.toggle("dark", isDark);
     root.setAttribute("data-accent", savedAccent);
     root.setAttribute("data-wallpaper", savedWallpaper);
+    // NEW: seed the CSS var so the solid rule can read it
+    root.style.setProperty("--solid-bg", savedSolid);
 
     // listen for system theme changes
     const onChange = () => {
@@ -79,7 +91,7 @@ export function ThemeProvider({
 
     setReady(true);
     return () => mql.removeEventListener("change", onChange);
-  }, []); // <-- empty array, runs only once
+  }, []); // <-- only once
 
   // 3) Watch mode
   useEffect(() => {
@@ -104,18 +116,31 @@ export function ThemeProvider({
   useEffect(() => {
     if (!ready) return;
     const root = document.documentElement;
-    if (wallpaper.type === "builtin") {
-      root.setAttribute("data-wallpaper", wallpaper.id);
-      localStorage.setItem("ui-theme-wallpaper", wallpaper.id);
-      root.style.backgroundImage = "";
-    } else {
-      // user-upload: session only
-      root.setAttribute("data-wallpaper", "upload");
-      root.style.backgroundImage = `url(${wallpaper.url})`;
-      root.style.backgroundSize = "cover";
-      root.style.backgroundPosition = "center";
+    root.setAttribute("data-wallpaper", wallpaper.id);
+    localStorage.setItem("ui-theme-wallpaper", wallpaper.id);
+
+    // Reset image-related styles unconditionally
+    root.style.backgroundImage = "";
+    root.style.backgroundSize = "";
+    root.style.backgroundPosition = "";
+
+    // If solid, ensure --solid-bg is applied (actual color set in the next effect as well)
+    if (wallpaper.id === "solid") {
+      root.style.setProperty("--solid-bg", solidColor);
     }
-  }, [wallpaper, ready]);
+  }, [wallpaper, ready]); // reads solidColor too, but separate effect below keeps it in sync
+
+  // NEW 6) Watch solidColor
+  useEffect(() => {
+    if (!ready) return;
+    localStorage.setItem("ui-theme-solid-color", solidColor);
+    const root = document.documentElement;
+    root.style.setProperty("--solid-bg", solidColor);
+    // if current wallpaper is solid, make sure background reflects it immediately
+    if (wallpaper.id === "solid") {
+      // nothing else needed because CSS uses var(--solid-bg)
+    }
+  }, [solidColor, wallpaper, ready]);
 
   return (
     <Ctx.Provider
@@ -126,6 +151,8 @@ export function ThemeProvider({
         setMode,
         setAccent,
         setWallpaper,
+        solidColor, // NEW
+        setSolidColor, // NEW
         ready,
       }}
     >
