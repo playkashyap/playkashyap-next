@@ -211,13 +211,27 @@ html.dark[data-wallpaper="default"] {
   background: var(--solid-bg, #111111);
 }
 
+@theme inline {
+  /* ...other vars... */
+
+  /* Use system stack that resolves to SF on macOS */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  /* Keep your mono mapping to Geist Mono */
+  --font-mono: var(--font-geist-mono);
+}
+
+/* Make sure the font is actually applied to body */
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
 
   body {
-    @apply text-foreground;
+    @apply text-foreground font-sans;
+    /* <-- add font-sans */
     background-color: transparent;
   }
 }

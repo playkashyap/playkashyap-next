@@ -147,7 +147,7 @@ export default function MacWindow({
           })
         }
         bounds="parent"
-        minWidth={520}
+        minWidth={325}
         minHeight={220}
         dragHandleClassName="macwin-drag"
         enableResizing={{

@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "motion/react";
 import React, { useRef, useState, useEffect, useMemo } from "react";
 import { randomInRange } from "@/lib/random";
 
+import { ScrollArea } from "./scroll-area";
+
 type DivRef = React.RefObject<HTMLDivElement | null>;
 
 function generateBeams(parentW: number, count = 8) {
@@ -54,8 +56,7 @@ export const BackgroundBeamsWithCollision = ({
     <div
       ref={parentRef}
       className={cn(
-        // Make this component fill its parent; let the parent define size.
-        "w-full h-full bg-gradient-to-b from-white to-neutral-100 dark:from-neutral-950 dark:to-neutral-800 relative flex items-center justify-center overflow-hidden",
+        "w-full h-full relative flex items-center justify-center overflow-hidden",
         className
       )}
     >
@@ -68,7 +69,7 @@ export const BackgroundBeamsWithCollision = ({
         />
       ))}
 
-      {children}
+      <ScrollArea className="w-full h-full z-10">{children}</ScrollArea>
 
       <div
         ref={containerRef}
