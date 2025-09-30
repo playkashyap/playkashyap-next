@@ -7,6 +7,8 @@ import { DockPortal } from "@/components/shell/DockPortal";
 import { Loader } from "@/components/Loader/loader";
 import MacTopBar from "@/components/topbar/topbar";
 import MacWindow from "@/components/macWindow/macWindow";
+import { WindowManagerProvider } from "@/components/window/windowManager";
+import { WeatherWidget } from "@/components/wedgets/WeatherWidget";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({
@@ -32,9 +34,12 @@ export default function RootLayout({
       >
         <ThemeProvider defaultMode="system" defaultAccent="violet">
           <SplashGate durationMs={4500} Loader={Loader}>
-            <MacTopBar />
-            <MacWindow>{children}</MacWindow>
-            <DockPortal />
+            <WindowManagerProvider>
+              <MacTopBar />
+              <WeatherWidget fallbackCity="Delhi" floating resizable />
+              <MacWindow>{children}</MacWindow>
+              <DockPortal />
+            </WindowManagerProvider>
           </SplashGate>
         </ThemeProvider>
       </body>

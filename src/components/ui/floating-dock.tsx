@@ -11,9 +11,15 @@ import {
   useSpring,
   useTransform,
 } from "motion/react";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
+import { useWindowManager } from "@/components/window/windowManager"; // 👈 import
 
-type DockItem = { title: string; icon: React.ReactNode; href: string };
+type DockItem = {
+  title: string;
+  icon: React.ReactNode;
+  href: string;
+  onClick?: (e: React.MouseEvent) => void;
+};
 
 export const FloatingDock = ({
   items,
@@ -63,6 +69,7 @@ const FloatingDockMobile = ({
                 <NavItemLink
                   href={item.href}
                   ariaLabel={item.title}
+                  onClick={item.onClick}
                   className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-foreground/5 hover:bg-foreground/10 transition"
                 >
                   <div className="h-4 w-4 text-foreground">{item.icon}</div>
@@ -113,13 +120,19 @@ function IconContainer({
   title,
   icon,
   href,
+  onClick,
 }: {
   mouseX: MotionValue;
   title: string;
   icon: React.ReactNode;
   href: string;
+  onClick?: (e: React.MouseEvent) => void;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+
+  // ✅ Hook into WindowManager using this window’s key
+  const key = `macwin:${href === "/" ? "/" : href}`;
+  const { minimized } = useWindowManager(key);
 
   const distance = useTransform(mouseX, (val) => {
     const bounds = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
@@ -129,63 +142,93 @@ function IconContainer({
   const widthTransform = useTransform(distance, [-150, 0, 150], [40, 80, 40]);
   const heightTransform = useTransform(distance, [-150, 0, 150], [40, 80, 40]);
 
-  const widthTransformIcon = useTransform(distance, [-150, 0, 150], [20, 40, 20]);
-  const heightTransformIcon = useTransform(distance, [-150, 0, 150], [20, 40, 20]);
+  const widthTransformIcon = useTransform(
+    distance,
+    [-150, 0, 150],
+    [20, 40, 20]
+  );
+  const heightTransformIcon = useTransform(
+    distance,
+    [-150, 0, 150],
+    [20, 40, 20]
+  );
 
-  const width = useSpring(widthTransform, { mass: 0.1, stiffness: 150, damping: 12 });
-  const height = useSpring(heightTransform, { mass: 0.1, stiffness: 150, damping: 12 });
+  const width = useSpring(widthTransform, {
+    mass: 0.1,
+    stiffness: 150,
+    damping: 12,
+  });
+  const height = useSpring(heightTransform, {
+    mass: 0.1,
+    stiffness: 150,
+    damping: 12,
+  });
 
-  const widthIcon = useSpring(widthTransformIcon, { mass: 0.1, stiffness: 150, damping: 12 });
-  const heightIcon = useSpring(heightTransformIcon, { mass: 0.1, stiffness: 150, damping: 12 });
+  const widthIcon = useSpring(widthTransformIcon, {
+    mass: 0.1,
+    stiffness: 150,
+    damping: 12,
+  });
+  const heightIcon = useSpring(heightTransformIcon, {
+    mass: 0.1,
+    stiffness: 150,
+    damping: 12,
+  });
 
   const [hovered, setHovered] = useState(false);
 
   return (
-    <NavItemLink href={href} ariaLabel={title}>
-      <motion.div
-        ref={ref}
-        style={{ width, height }}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        className="relative flex aspect-square items-center justify-center rounded-full bg-foreground/5 hover:bg-foreground/10 border border-border/60 transition hover:ring-2 hover:ring-ring hover:ring-offset-2 hover:ring-offset-background"
-      >
-        <AnimatePresence>
-          {hovered && (
-            <motion.div
-              initial={{ opacity: 0, y: 10, x: "-50%" }}
-              animate={{ opacity: 1, y: 0, x: "-50%" }}
-              exit={{ opacity: 0, y: 2, x: "-50%" }}
-              className="absolute -top-8 left-1/2 w-fit whitespace-pre rounded-md border border-border bg-popover px-2 py-0.5 text-xs text-popover-foreground shadow-sm"
-            >
-              {title}
-            </motion.div>
-          )}
-        </AnimatePresence>
-
+    <div className="flex flex-col items-center">
+      <NavItemLink href={href} ariaLabel={title} onClick={onClick}>
         <motion.div
-          style={{ width: widthIcon, height: heightIcon }}
-          className="flex items-center justify-center text-foreground/85"
+          ref={ref}
+          style={{ width, height }}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+          className="relative flex aspect-square items-center justify-center rounded-full bg-foreground/5 hover:bg-foreground/10 border border-border/60 transition hover:ring-2 hover:ring-ring hover:ring-offset-2 hover:ring-offset-background"
         >
-          {icon}
+          <AnimatePresence>
+            {hovered && (
+              <motion.div
+                initial={{ opacity: 0, y: 10, x: "-50%" }}
+                animate={{ opacity: 1, y: 0, x: "-50%" }}
+                exit={{ opacity: 0, y: 2, x: "-50%" }}
+                className="absolute -top-8 left-1/2 w-fit whitespace-pre rounded-md border border-border bg-popover px-2 py-0.5 text-xs text-popover-foreground shadow-sm"
+              >
+                {title}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <motion.div
+            style={{ width: widthIcon, height: heightIcon }}
+            className="flex items-center justify-center text-foreground/85"
+          >
+            {icon}
+          </motion.div>
         </motion.div>
-      </motion.div>
-      {/* Optional active dot:
-      <div className="mt-1 h-1.5 w-1.5 mx-auto rounded-full bg-primary" /> */}
-    </NavItemLink>
+      </NavItemLink>
+      <div className="h-[2px]">
+        {minimized && (
+          <div className="mt-1 h-1.5 w-1.5 rounded-full bg-primary"></div>
+        )}
+      </div>
+    </div>
   );
 }
 
-/** Utility: use Next <Link> for internal routes; <a target=_blank> for externals */
 function NavItemLink({
   href,
   ariaLabel,
   className,
   children,
+  onClick,
 }: {
   href: string;
   ariaLabel: string;
   className?: string;
   children: React.ReactNode;
+  onClick?: (e: React.MouseEvent) => void;
 }) {
   const isExternal = /^https?:\/\//i.test(href);
   if (isExternal) {
@@ -196,13 +239,19 @@ function NavItemLink({
         className={className}
         target="_blank"
         rel="noreferrer"
+        onClick={onClick}
       >
         {children}
       </a>
     );
   }
   return (
-    <Link href={href} aria-label={ariaLabel} className={className}>
+    <Link
+      href={href}
+      aria-label={ariaLabel}
+      className={className}
+      onClick={onClick}
+    >
       {children}
     </Link>
   );

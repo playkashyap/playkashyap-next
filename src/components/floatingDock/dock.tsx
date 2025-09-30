@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { MouseEvent } from "react";
+import { usePathname } from "next/navigation";
 import { FloatingDock } from "@/components/ui/floating-dock";
 import {
   IconBrandGithub,
@@ -12,18 +13,34 @@ import {
 } from "@tabler/icons-react";
 import { ThemeTogglePopover } from "../theme/themeToggle";
 import Image from "next/image";
+import { useWindowManager } from "@/components/window/windowManager";
 
 export function Dock() {
+  const pathname = usePathname() || "/";
+  const key = `macwin:${pathname}`;
+  const { minimized, restore } = useWindowManager(key);
+
+  // Helper: intercept clicks on the active item when minimized
+  const interceptIfMinimized = (href: string) => (e: MouseEvent) => {
+    const isSameRoute = href === pathname || (href === "/" && pathname === "/");
+    if (minimized && isSameRoute) {
+      e.preventDefault();
+      restore();
+    }
+  };
+
   const links = [
     {
       title: "Home",
       icon: <IconHome className="h-full w-full text-foreground/80" />,
       href: "/",
+      onClick: interceptIfMinimized("/"),
     },
     {
       title: "Skills",
       icon: <IconTerminal2 className="h-full w-full text-foreground/80" />,
       href: "/skills",
+      onClick: interceptIfMinimized("/skills"),
     },
     {
       title: "Components",
@@ -48,8 +65,6 @@ export function Dock() {
       icon: <IconExchange className="h-full w-full text-foreground/80" />,
       href: "#",
     },
-    // External links: if your FloatingDock uses Next <Link>, keep these as '#'
-    // or update FloatingDock to detect absolute URLs and render <a target="_blank">.
     {
       title: "Twitter",
       icon: <IconBrandX className="h-full w-full text-foreground/80" />,
@@ -60,12 +75,27 @@ export function Dock() {
       icon: <IconBrandGithub className="h-full w-full text-foreground/80" />,
       href: "#",
     },
-    // Theme popover in a dock icon
     {
       title: "Theme",
       icon: <ThemeTogglePopover side="top" align="center" />,
       href: "#",
     },
+    // Optional: show a dedicated Restore button only when minimized
+    // ...(minimized
+    //   ? [
+    //       {
+    //         title: "Restore",
+    //         icon: (
+    //           <IconTerminal2 className="h-full w-full text-foreground/80" />
+    //         ),
+    //         href: pathname, // stay on the same page
+    //         onClick: (e: MouseEvent) => {
+    //           e.preventDefault();
+    //           restore();
+    //         },
+    //       },
+    //     ]
+    //   : []),
   ];
 
   return (
