@@ -10,6 +10,7 @@ import {
   IconHome,
   IconNewSection,
   IconTerminal2,
+  IconBulbFilled
 } from "@tabler/icons-react";
 import { ThemeTogglePopover } from "../theme/themeToggle";
 import Image from "next/image";
@@ -43,9 +44,9 @@ export function Dock() {
       onClick: interceptIfMinimized("/skills"),
     },
     {
-      title: "Components",
-      icon: <IconNewSection className="h-full w-full text-foreground/80" />,
-      href: "#",
+      title: "Projects",
+      icon: <IconBulbFilled className="h-full w-full text-foreground/80" />,
+      href: "/projects",
     },
     {
       title: "Profile",
