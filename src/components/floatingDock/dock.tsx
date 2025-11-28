@@ -12,6 +12,9 @@ import {
   IconTerminal2,
   IconBulbFilled
 } from "@tabler/icons-react";
+
+import { FaPersonDotsFromLine } from "react-icons/fa6";
+
 import { ThemeTogglePopover } from "../theme/themeToggle";
 import Image from "next/image";
 import { useWindowManager } from "@/components/window/windowManager";
@@ -24,6 +27,7 @@ export function Dock() {
   // Helper: intercept clicks on the active item when minimized
   const interceptIfMinimized = (href: string) => (e: MouseEvent) => {
     const isSameRoute = href === pathname || (href === "/" && pathname === "/");
+    console.log(pathname, isSameRoute)
     if (minimized && isSameRoute) {
       e.preventDefault();
       restore();
@@ -47,6 +51,13 @@ export function Dock() {
       title: "Projects",
       icon: <IconBulbFilled className="h-full w-full text-foreground/80" />,
       href: "/projects",
+      onClick: interceptIfMinimized("/projects"),
+    },
+    {
+      title: "Experience",
+      icon: <FaPersonDotsFromLine className="h-full w-full text-foreground/80" />,
+      href: "/experience",
+      onClick: interceptIfMinimized("/experience"),
     },
     {
       title: "Profile",

@@ -19,6 +19,7 @@ import {
   SiTailwindcss,
   SiMui,
   SiShadcnui,
+  SiElectron
 } from "react-icons/si";
 import { DiMsqlServer, DiNodejs } from "react-icons/di";
 import { FaHtml5 } from "react-icons/fa";
@@ -181,6 +182,12 @@ const frameworks: Skill[] = [
     icon: <SiShadcnui size={100} className="text-black dark:text-white" />,
     color: "currentColor",
   },
+  {
+    name: "Electron.js",
+    level: 5,
+    icon: <SiElectron size={100} color="#9feaf9" />,
+    color: "#9feaf9",
+  }
 ];
 
 const languages: Skill[] = [
