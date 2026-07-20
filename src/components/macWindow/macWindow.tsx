@@ -23,6 +23,10 @@ interface WindowState {
   y?: number;
 }
 
+const TITLE_OVERRIDES: Record<string, string> = {
+  github: "GitHub",
+};
+
 function pathToTitle(pathname: string): string {
   if (!pathname || pathname === "/") return "Home";
   const first = pathname
@@ -31,6 +35,7 @@ function pathToTitle(pathname: string): string {
     .split("/")
     .filter(Boolean)[0];
   if (!first) return "Home";
+  if (TITLE_OVERRIDES[first]) return TITLE_OVERRIDES[first];
   return first.replace(/[-_]/g, " ").replace(/\b\w/g, (m) => m.toUpperCase());
 }
 
@@ -57,12 +62,12 @@ export default function MacWindow({
   // ---- Compute initial position/size within the stage ----
   const computeInitial = React.useCallback((): WindowState => {
     const rect = stageRef.current?.getBoundingClientRect();
-    const vw = rect?.width ?? window.innerWidth;
-    const vh = rect?.height ?? window.innerHeight;
-    const w = Math.min(initial.width, vw - margin * 2);
-    const h = Math.min(initial.height, vh - margin * 2);
-    const x = (vw - w) / 2;
-    const y = (vh - h) / 2;
+    const vw = rect?.width || window.innerWidth || 1280;
+    const vh = rect?.height || window.innerHeight || 720;
+    const w = Math.max(325, Math.min(initial.width, vw - margin * 2));
+    const h = Math.max(220, Math.min(initial.height, vh - margin * 2));
+    const x = Math.max(margin, (vw - w) / 2);
+    const y = Math.max(margin, (vh - h) / 2);
     return { width: w, height: h, x, y };
   }, [initial.width, initial.height, margin]);
 
@@ -72,7 +77,8 @@ export default function MacWindow({
     const saved = window.localStorage.getItem(key);
     if (saved) {
       try {
-        return JSON.parse(saved) as WindowState;
+        const parsed = JSON.parse(saved) as WindowState;
+        if (parsed.width > 0 && parsed.height > 0) return parsed;
       } catch {}
     }
     return computeInitial();

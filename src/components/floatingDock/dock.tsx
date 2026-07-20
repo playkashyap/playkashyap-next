@@ -85,7 +85,8 @@ export function Dock() {
     {
       title: "GitHub",
       icon: <IconBrandGithub className="h-full w-full text-foreground/80" />,
-      href: "#",
+      href: "/github",
+      onClick: interceptIfMinimized("/github"),
     },
     {
       title: "Theme",

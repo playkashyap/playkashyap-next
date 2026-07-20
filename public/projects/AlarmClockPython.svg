@@ -1,0 +1,50 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#050a17" />
+      <stop offset="1" stop-color="#0a1428" />
+    </linearGradient>
+    <linearGradient id="wordmark" x1="0" y1="0" x2="1200" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#60a5fa" />
+      <stop offset="1" stop-color="#facc15" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <g transform="translate(600,315) scale(0.8,0.86) translate(-600,-315)">
+  <circle cx="50" cy="50" r="20" fill="none" stroke="#60a5fa" stroke-width="2" opacity="0.6" />
+  <path d="M1130 30 L1160 30 L1160 60" fill="none" stroke="#60a5fa" stroke-width="2" opacity="0.6" />
+  <path d="M50 570 L50 600 L80 600" fill="none" stroke="#60a5fa" stroke-width="2" opacity="0.5" />
+  <path d="M1150 570 L1150 600 L1120 600" fill="none" stroke="#60a5fa" stroke-width="2" opacity="0.5" />
+
+  <rect x="130" y="90" width="940" height="450" rx="18" fill="#040814" stroke="#1e2a4a" stroke-width="1.5" />
+  <circle cx="163" cy="122" r="6" fill="#fb7185" /><circle cx="185" cy="122" r="6" fill="#facc15" /><circle cx="207" cy="122" r="6" fill="#4ade80" />
+  <text x="600" y="127" text-anchor="middle" font-family="'Courier New',monospace" font-size="13" fill="#60a5fa">alarmclock &#8212; textual</text>
+
+  <text x="165" y="175" font-family="Arial" font-size="30" font-weight="700" fill="url(#wordmark)">AlarmClock</text>
+  <text x="165" y="198" font-family="'Courier New',monospace" font-size="12" fill="#60a5fa" opacity="0.85">TERMINAL UI &#183; PYTHON</text>
+
+  <rect x="165" y="225" width="850" height="200" rx="10" fill="#040814" stroke="#1e2a4a" />
+  <text x="190" y="255" font-family="'Courier New',monospace" font-size="13" fill="#facc15">#</text>
+  <text x="215" y="255" font-family="'Courier New',monospace" font-size="13" fill="#e5e7eb">TIME</text>
+  <text x="420" y="255" font-family="'Courier New',monospace" font-size="13" fill="#e5e7eb">LABEL</text>
+  <text x="700" y="255" font-family="'Courier New',monospace" font-size="13" fill="#e5e7eb">STATUS</text>
+  <line x1="190" y1="268" x2="990" y2="268" stroke="#1e2a4a" />
+
+  <text x="190" y="298" font-family="'Courier New',monospace" font-size="13" fill="#93c5fd">1</text>
+  <text x="215" y="298" font-family="'Courier New',monospace" font-size="13" fill="#facc15">07:00</text>
+  <text x="420" y="298" font-family="'Courier New',monospace" font-size="13" fill="#cbd5e1">Wake up</text>
+  <text x="700" y="298" font-family="'Courier New',monospace" font-size="13" fill="#4ade80">&#9679; armed</text>
+
+  <text x="190" y="328" font-family="'Courier New',monospace" font-size="13" fill="#93c5fd">2</text>
+  <text x="215" y="328" font-family="'Courier New',monospace" font-size="13" fill="#facc15">12:30</text>
+  <text x="420" y="328" font-family="'Courier New',monospace" font-size="13" fill="#cbd5e1">Lunch break</text>
+  <text x="700" y="328" font-family="'Courier New',monospace" font-size="13" fill="#4ade80">&#9679; armed</text>
+
+  <rect x="190" y="345" width="230" height="6" fill="#1e2a4a" opacity="0" />
+  <rect x="190" y="352" width="800" height="46" rx="6" fill="#0a1428" stroke="#60a5fa" />
+  <text x="205" y="380" font-family="'Courier New',monospace" font-size="13" fill="#facc15">&gt; add alarm --time 07:00 --label "Wake up"</text>
+
+  <text x="165" y="480" font-family="'Courier New',monospace" font-size="14" letter-spacing="2" fill="#60a5fa" opacity="0.85">LIVE DASHBOARD &#183; ARROW-KEY NAVIGATION</text>
+
+  </g>
+</svg>

@@ -62,7 +62,7 @@ export const BackgroundBeamsWithCollision = ({
     >
       {beams.map((beam, idx) => (
         <CollisionMechanism
-          key={(beam.initialX ?? 0) + "-beam-" + idx}
+          key={parentWidth + "-" + (beam.initialX ?? 0) + "-beam-" + idx}
           beamOptions={beam}
           containerRef={containerRef}
           parentRef={parentRef}
@@ -159,18 +159,15 @@ const CollisionMechanism = React.forwardRef<
       <motion.div
         key={beamKey}
         ref={beamRef}
-        animate="animate"
         initial={{
-          translateY: beamOptions.initialY ?? "-200px",
-          translateX: (beamOptions.initialX ?? 0) + "px",
+          y: beamOptions.initialY ?? -200,
+          x: beamOptions.initialX ?? 0,
           rotate: beamOptions.rotate ?? 0,
         }}
-        variants={{
-          animate: {
-            translateY: beamOptions.translateY ?? "1800px",
-            translateX: (beamOptions.translateX ?? 0) + "px",
-            rotate: beamOptions.rotate ?? 0,
-          },
+        animate={{
+          y: beamOptions.translateY ?? 1800,
+          x: beamOptions.translateX ?? 0,
+          rotate: beamOptions.rotate ?? 0,
         }}
         transition={{
           duration: beamOptions.duration ?? 8,

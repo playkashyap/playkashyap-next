@@ -23,6 +23,7 @@ const TITLE_MAP: Record<string, string> = {
   "/projects": "Projects",
   "/settings": "System Settings",
   "/about": "About",
+  "/github": "GitHub",
 };
 
 function pathToTitle(pathname: string): string {

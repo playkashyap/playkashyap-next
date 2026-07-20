@@ -19,12 +19,32 @@ import {
   SiTailwindcss,
   SiMui,
   SiShadcnui,
-  SiElectron
+  SiElectron,
+  SiNvidia,
+  SiFastapi,
+  SiOllama,
+  SiVllm,
+  SiGstreamer,
+  SiApachekafka,
+  SiAnthropic,
+  SiDocker,
+  SiNginx,
+  SiGit,
+  SiTailscale,
+  SiKubernetes,
+  SiLinux,
+  SiOpenrouter,
+  SiFfmpeg,
 } from "react-icons/si";
 import { DiMsqlServer, DiNodejs } from "react-icons/di";
-import { FaHtml5 } from "react-icons/fa";
+import { FaHtml5, FaAws } from "react-icons/fa";
 import { FaBootstrap } from "react-icons/fa6";
 import { RiNextjsFill } from "react-icons/ri";
+import {
+  IconBrandOpenai,
+  IconAdjustments,
+  IconCloudComputing,
+} from "@tabler/icons-react";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card";
 import { FaStar, FaRegStar } from "react-icons/fa";
@@ -187,7 +207,127 @@ const frameworks: Skill[] = [
     level: 5,
     icon: <SiElectron size={100} color="#9feaf9" />,
     color: "#9feaf9",
-  }
+  },
+  {
+    name: "FastAPI",
+    level: 8,
+    icon: <SiFastapi size={100} color="#009688" />,
+    color: "#009688",
+  },
+];
+
+const aiml: Skill[] = [
+  {
+    name: "CUDA",
+    level: 8,
+    icon: <SiNvidia size={100} color="#76B900" />,
+    color: "#76B900",
+  },
+  {
+    name: "Ollama",
+    level: 8,
+    icon: <SiOllama size={100} className="text-black dark:text-white" />,
+    color: "currentColor",
+  },
+  {
+    name: "vLLM",
+    level: 7,
+    icon: <SiVllm size={100} color="#7C3AED" />,
+    color: "#7C3AED",
+  },
+  {
+    name: "Claude API",
+    level: 7,
+    icon: <SiAnthropic size={100} color="#D97757" />,
+    color: "#D97757",
+  },
+  {
+    name: "GStreamer",
+    level: 7,
+    icon: <SiGstreamer size={100} color="#FF6600" />,
+    color: "#FF6600",
+  },
+  {
+    name: "OpenAI API",
+    level: 7,
+    icon: <IconBrandOpenai size={100} className="text-black dark:text-white" />,
+    color: "currentColor",
+  },
+  {
+    name: "OpenRouter API",
+    level: 6,
+    icon: <SiOpenrouter size={100} className="text-black dark:text-white" />,
+    color: "currentColor",
+  },
+  {
+    name: "Fine-tuning",
+    level: 7,
+    icon: <IconAdjustments size={100} color="#8B5CF6" />,
+    color: "#8B5CF6",
+  },
+  {
+    name: "RunPod",
+    level: 7,
+    icon: <IconCloudComputing size={100} color="#8B5CF6" />,
+    color: "#8B5CF6",
+  },
+];
+
+const infra: Skill[] = [
+  {
+    name: "Docker",
+    level: 8,
+    icon: <SiDocker size={100} color="#2496ED" />,
+    color: "#2496ED",
+  },
+  {
+    name: "FFmpeg",
+    level: 7,
+    icon: <SiFfmpeg size={100} color="#007808" />,
+    color: "#007808",
+  },
+  {
+    name: "Kubernetes",
+    level: 6,
+    icon: <SiKubernetes size={100} color="#326CE5" />,
+    color: "#326CE5",
+  },
+  {
+    name: "AWS",
+    level: 7,
+    icon: <FaAws size={100} color="#FF9900" />,
+    color: "#FF9900",
+  },
+  {
+    name: "Linux",
+    level: 8,
+    icon: <SiLinux size={100} className="text-black dark:text-white" />,
+    color: "currentColor",
+  },
+  {
+    name: "Kafka",
+    level: 7,
+    icon: <SiApachekafka size={100} className="text-black dark:text-white" />,
+    color: "currentColor",
+  },
+  {
+    name: "Nginx",
+    level: 7,
+    icon: <SiNginx size={100} color="#009639" />,
+    color: "#009639",
+  },
+  {
+    name: "Tailscale",
+    level: 6,
+    icon: <SiTailscale size={100} className="text-black dark:text-white" />,
+    color: "currentColor",
+  },
+  {
+    name: "Git",
+    level: 8,
+    icon: <SiGit size={100} color="#F05032" />,
+    color: "#F05032",
+  },
 ];
 
 const languages: Skill[] = [
@@ -265,7 +405,9 @@ export default function Skill() {
       <div className="flex flex-col gap-10 p-4">
         <SkillsSection title="Languages" items={languages} />
         <SkillsSection title="Frameworks" items={frameworks} />
+        <SkillsSection title="AI & ML" items={aiml} />
         <SkillsSection title="Databases" items={databases} />
+        <SkillsSection title="Infra & Tools" items={infra} />
       </div>
     </BackgroundBeamsWithCollision>
   );

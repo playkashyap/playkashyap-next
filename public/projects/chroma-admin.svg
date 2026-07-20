@@ -1,0 +1,44 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0a0512" />
+      <stop offset="1" stop-color="#150a1f" />
+    </linearGradient>
+    <linearGradient id="wordmark" x1="0" y1="0" x2="1200" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#c084fc" />
+      <stop offset="1" stop-color="#f0abfc" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <g transform="translate(600,315) scale(0.8,0.86) translate(-600,-315)">
+  <circle cx="50" cy="50" r="20" fill="none" stroke="#c084fc" stroke-width="2" opacity="0.6" />
+  <path d="M1130 30 L1160 30 L1160 60" fill="none" stroke="#c084fc" stroke-width="2" opacity="0.6" />
+  <path d="M50 570 L50 600 L80 600" fill="none" stroke="#c084fc" stroke-width="2" opacity="0.5" />
+  <path d="M1150 570 L1150 600 L1120 600" fill="none" stroke="#c084fc" stroke-width="2" opacity="0.5" />
+
+  <rect x="130" y="90" width="940" height="450" rx="18" fill="#0d0714" stroke="#3b1d52" stroke-width="1.5" />
+  <ellipse cx="175" cy="122" rx="14" ry="6" fill="none" stroke="#c084fc" stroke-width="2" />
+  <path d="M161 122 L161 138 A14 6 0 0 0 189 138 L189 122" fill="none" stroke="#c084fc" stroke-width="2" />
+  <text x="205" y="128" font-family="Arial" font-size="16" font-weight="700" fill="#e5e7eb">Chroma Admin</text>
+  <circle cx="985" cy="122" r="4" fill="#ef4444" />
+  <text x="998" y="127" font-family="'Courier New',monospace" font-size="11" fill="#9ca3af">Disconnected</text>
+
+  <text x="175" y="195" font-family="Arial" font-size="28" font-weight="700" fill="#e5e7eb">Connect to ChromaDB</text>
+  <text x="175" y="222" font-family="Arial" font-size="14" fill="#9ca3af">Enter the HTTP URL of your Chroma server.</text>
+
+  <text x="175" y="266" font-family="'Courier New',monospace" font-size="12" fill="#c084fc">Chroma Base URL</text>
+  <rect x="175" y="278" width="850" height="42" rx="8" fill="#150a1f" stroke="#4c2a66" />
+  <text x="192" y="304" font-family="'Courier New',monospace" font-size="13" fill="#e9d5ff">http://localhost:8000</text>
+
+  <text x="175" y="352" font-family="'Courier New',monospace" font-size="12" fill="#c084fc">Connection Mode</text>
+  <rect x="175" y="364" width="410" height="70" rx="10" fill="#1c0f2b" stroke="#c084fc" stroke-width="2" />
+  <text x="198" y="392" font-family="Arial" font-size="14" font-weight="700" fill="#e9d5ff">Direct Mode</text>
+  <text x="198" y="412" font-family="Arial" font-size="11" fill="#a78bfa">Browser connects directly</text>
+  <rect x="605" y="364" width="420" height="70" rx="10" fill="#150a1f" stroke="#3b1d52" />
+  <text x="628" y="392" font-family="Arial" font-size="14" font-weight="700" fill="#9ca3af">Dev Proxy</text>
+  <text x="628" y="412" font-family="Arial" font-size="11" fill="#6b7280">Vite proxies requests</text>
+
+  <text x="175" y="480" font-family="'Courier New',monospace" font-size="14" letter-spacing="2" fill="#e879f9" opacity="0.85">COLLECTIONS &#183; EMBEDDINGS &#183; SCATTER PLOTS</text>
+
+  </g>
+</svg>

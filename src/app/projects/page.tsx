@@ -129,7 +129,7 @@ export default function Projects() {
           </div>
         ) : null}
       </AnimatePresence>
-      <ul className="max-w-2xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 items-start gap-4">
+      <ul className="max-w-5xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 items-start gap-6">
         {cards.map((card, index) => (
           <motion.div
             layoutId={`card-${card.title}-${id}`}
@@ -204,91 +204,154 @@ export const CloseIcon = () => {
 
 const cards = [
   {
-    description: "Lana Del Rey",
-    title: "Summertime Sadness",
-    src: "https://assets.aceternity.com/demos/lana-del-rey.jpeg",
+    description: "AI-native dev workspace",
+    title: "DevForge",
+    src: "/projects/devforge.svg",
     ctaText: "Visit",
-    ctaLink: "https://ui.aceternity.com/templates",
+    ctaLink: "https://devforge.playkashyap.com/",
     content: () => {
       return (
         <p>
-          Lana Del Rey, an iconic American singer-songwriter, is celebrated for
-          her melancholic and cinematic music style. Born Elizabeth Woolridge
-          Grant in New York City, she has captivated audiences worldwide with
-          her haunting voice and introspective lyrics. <br /> <br /> Her songs
-          often explore themes of tragic romance, glamour, and melancholia,
-          drawing inspiration from both contemporary and vintage pop culture.
-          With a career that has seen numerous critically acclaimed albums, Lana
-          Del Rey has established herself as a unique and influential figure in
-          the music industry, earning a dedicated fan base and numerous
-          accolades.
+          A precision developer workbench that puts AI chat, an AI site
+          builder ("Studio"), and 22 local-first tools inside a single tab
+          that never breaks your flow.
+          <br /> <br />
+          Chat across 15+ models (Claude, GPT-4o, Gemini) with streaming
+          responses and live web search, generate whole page sections from a
+          prompt and refine them visually or in code, and reach for
+          instant, offline instruments — codec, JSON transform, config
+          forge, and more — with zero egress: nothing leaves the tab.
         </p>
       );
     },
   },
   {
-    description: "Babbu Maan",
-    title: "Mitran Di Chhatri",
-    src: "https://assets.aceternity.com/demos/babbu-maan.jpeg",
-    ctaText: "Visit",
-    ctaLink: "https://ui.aceternity.com/templates",
+    description: "Voice-first AI companion",
+    title: "LUNA",
+    src: "/projects/luna.svg",
+    ctaText: "Join Waitlist",
+    ctaLink: "https://luna.playkashyap.com/",
     content: () => {
       return (
         <p>
-          Babu Maan, a legendary Punjabi singer, is renowned for his soulful
-          voice and profound lyrics that resonate deeply with his audience. Born
-          in the village of Khant Maanpur in Punjab, India, he has become a
-          cultural icon in the Punjabi music industry. <br /> <br /> His songs
-          often reflect the struggles and triumphs of everyday life, capturing
-          the essence of Punjabi culture and traditions. With a career spanning
-          over two decades, Babu Maan has released numerous hit albums and
-          singles that have garnered him a massive fan following both in India
-          and abroad.
-        </p>
-      );
-    },
-  },
-
-  {
-    description: "Metallica",
-    title: "For Whom The Bell Tolls",
-    src: "https://assets.aceternity.com/demos/metallica.jpeg",
-    ctaText: "Visit",
-    ctaLink: "https://ui.aceternity.com/templates",
-    content: () => {
-      return (
-        <p>
-          Metallica, an iconic American heavy metal band, is renowned for their
-          powerful sound and intense performances that resonate deeply with
-          their audience. Formed in Los Angeles, California, they have become a
-          cultural icon in the heavy metal music industry. <br /> <br /> Their
-          songs often reflect themes of aggression, social issues, and personal
-          struggles, capturing the essence of the heavy metal genre. With a
-          career spanning over four decades, Metallica has released numerous hit
-          albums and singles that have garnered them a massive fan following
-          both in the United States and abroad.
+          A voice-first, visually-aware AI companion built to feel less like
+          a tool window and more like a live presence on your machine —
+          currently in early access.
+          <br /> <br />
+          Real-time speech-to-text with expressive voice replies and
+          barge-in support, multimodal vision through webcam analysis,
+          persistent memory across conversations, and OS-level tool use —
+          all running local-first, so nothing leaves your machine.
         </p>
       );
     },
   },
   {
-    description: "Lord Himesh",
-    title: "Aap Ka Suroor",
-    src: "https://assets.aceternity.com/demos/aap-ka-suroor.jpeg",
-    ctaText: "Visit",
-    ctaLink: "https://ui.aceternity.com/templates",
+    description: "Vector DB admin UI",
+    title: "Chroma Admin",
+    src: "/projects/chroma-admin.svg",
+    ctaText: "Live Demo",
+    ctaLink: "https://chroma-admin-nu.vercel.app",
     content: () => {
       return (
         <p>
-          Himesh Reshammiya, a renowned Indian music composer, singer, and
-          actor, is celebrated for his distinctive voice and innovative
-          compositions. Born in Mumbai, India, he has become a prominent figure
-          in the Bollywood music industry. <br /> <br /> His songs often feature
-          a blend of contemporary and traditional Indian music, capturing the
-          essence of modern Bollywood soundtracks. With a career spanning over
-          two decades, Himesh Reshammiya has released numerous hit albums and
-          singles that have garnered him a massive fan following both in India
-          and abroad.
+          A browser-based UI that connects directly to ChromaDB servers to
+          manage vector databases — no custom backend required. <br /> <br />
+          Lets you browse collections, query embeddings, and visualize data
+          with scatter plots straight from the browser.
+          <br /> <br />
+          <a
+            href="https://github.com/playkashyap/chroma-admin"
+            target="_blank"
+            className="underline"
+          >
+            View on GitHub
+          </a>
+        </p>
+      );
+    },
+  },
+  {
+    description: "Interactive physics learning",
+    title: "PhyVerse",
+    src: "/projects/PhyVerse.svg",
+    ctaText: "GitHub",
+    ctaLink: "https://github.com/playkashyap/PhyVerse",
+    content: () => {
+      return (
+        <p>
+          An open-source platform that teaches physics through interactive
+          simulations and hands-on experimentation instead of memorization.
+          <br /> <br />
+          Currently offers three interactive worlds — Motion Hall, Force
+          Factory, and Gravity Garden — with more planned for circuits, waves,
+          and optics.
+        </p>
+      );
+    },
+  },
+  {
+    description: "AI background remover",
+    title: "bgremover",
+    src: "/projects/bgremover.svg",
+    ctaText: "GitHub",
+    ctaLink: "https://github.com/playkashyap/bgremover",
+    content: () => {
+      return (
+        <p>
+          A background-removal tool that runs entirely client-side, using
+          ONNX machine learning models (Silueta and U2Netp) for image
+          segmentation directly in the browser.
+          <br /> <br />
+          No uploads to a server — inference happens on-device.
+        </p>
+      );
+    },
+  },
+  {
+    description: "Angular task manager",
+    title: "Task Manager",
+    src: "/projects/task-manager.svg",
+    ctaText: "GitHub",
+    ctaLink: "https://github.com/playkashyap/task-manager",
+    content: () => {
+      return (
+        <p>
+          A task management app built with Angular, with dedicated components
+          for creating/editing tasks and displaying the task list, backed by
+          a service layer for CRUD operations.
+        </p>
+      );
+    },
+  },
+  {
+    description: "Terminal alarm clock",
+    title: "AlarmClockPython",
+    src: "/projects/AlarmClockPython.svg",
+    ctaText: "GitHub",
+    ctaLink: "https://github.com/playkashyap/AlarmClockPython",
+    content: () => {
+      return (
+        <p>
+          A terminal-based alarm clock built with Textual, featuring a
+          live-updating dashboard, a data table navigable with arrow keys,
+          and modal dialogs for adding and editing alarms — all inside the
+          command line.
+        </p>
+      );
+    },
+  },
+  {
+    description: "Discord bot",
+    title: "discbot",
+    src: "/projects/discbot.svg",
+    ctaText: "GitHub",
+    ctaLink: "https://github.com/playkashyap/discbot",
+    content: () => {
+      return (
+        <p>
+          A Discord bot for automatically sharing meme content within Discord
+          servers.
         </p>
       );
     },
