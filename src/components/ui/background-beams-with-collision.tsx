@@ -49,8 +49,24 @@ export const BackgroundBeamsWithCollision = ({
     return () => ro.disconnect();
   }, []);
 
+  // The very first mount of the beam animations can start before the browser
+  // is actually ready to run them (mid-layout, mid-entrance-transition), which
+  // leaves them stuck at rest. A clean remount shortly after mount reliably
+  // kicks them into gear, so force exactly one here instead of relying on the
+  // user to trigger a remount by minimizing/maximizing the window.
+  const [mountGen, setMountGen] = useState(0);
+  useEffect(() => {
+    const id = requestAnimationFrame(() =>
+      requestAnimationFrame(() => setMountGen((g) => g + 1))
+    );
+    return () => cancelAnimationFrame(id);
+  }, []);
+
   // Generate beams based on *current* parent width
-  const beams = useMemo(() => generateBeams(parentWidth, 8), [parentWidth]);
+  const beams = useMemo(
+    () => generateBeams(parentWidth, 8),
+    [parentWidth, mountGen]
+  );
 
   return (
     <div
@@ -62,7 +78,7 @@ export const BackgroundBeamsWithCollision = ({
     >
       {beams.map((beam, idx) => (
         <CollisionMechanism
-          key={parentWidth + "-" + (beam.initialX ?? 0) + "-beam-" + idx}
+          key={mountGen + "-" + parentWidth + "-" + (beam.initialX ?? 0) + "-beam-" + idx}
           beamOptions={beam}
           containerRef={containerRef}
           parentRef={parentRef}
@@ -154,6 +170,24 @@ const CollisionMechanism = React.forwardRef<
     }
   }, [collision]);
 
+  // Independent fallback restart: collision detection only fires once the
+  // beam has visibly animated down into the collision zone, so if the
+  // animate transition ever fails to actually start or loop (relying on
+  // Motion's own `repeat` was unreliable), the beam sits frozen above the
+  // zone and collision is never detected — a deadlock. This timer
+  // guarantees a fresh restart every cycle regardless of whether the
+  // animation or collision detection actually ran.
+  useEffect(() => {
+    const ms =
+      ((beamOptions.delay ?? 0) +
+        (beamOptions.duration ?? 8) +
+        (beamOptions.repeatDelay ?? 0)) *
+        1000 +
+      500;
+    const id = setTimeout(() => setBeamKey((k) => k + 1), ms);
+    return () => clearTimeout(id);
+  }, [beamKey, beamOptions.delay, beamOptions.duration, beamOptions.repeatDelay]);
+
   return (
     <>
       <motion.div
@@ -171,11 +205,8 @@ const CollisionMechanism = React.forwardRef<
         }}
         transition={{
           duration: beamOptions.duration ?? 8,
-          repeat: Infinity,
-          repeatType: "loop",
           ease: "linear",
           delay: beamOptions.delay ?? 0,
-          repeatDelay: beamOptions.repeatDelay ?? 0,
         }}
         className={cn(
           "absolute left-0 top-20 m-auto h-14 w-px rounded-full",
